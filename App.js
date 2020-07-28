@@ -28,20 +28,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/screen/HomeScreen';
 import MapScreen from './src/screen/MapScreen'
 import RealTimeScreen from './src/screen/RealTimeScreen'
-
+import Route from './src/routes'
 
 const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
   return (
     <>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Maps" component={MapScreen} />
-        <Stack.Screen name="RealTime" component={RealTimeScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Route/>
     </>
   );
 };
