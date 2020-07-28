@@ -5,7 +5,7 @@ export default class MapScreen extends Component {
     render() {
         return (
             <View style={style.content}>
-                  <MapView
+                  {/* <MapView
                     style={style.maps}
                     initialRegion={{
                     latitude: -7.3619326,
@@ -21,7 +21,7 @@ export default class MapScreen extends Component {
                             description={'Hdsajljas'}
                             onDragEnd={(e) => console.log(e)}
                         />
-                </MapView> 
+                </MapView>  */}
             </View>
         )
     }

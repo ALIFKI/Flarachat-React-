@@ -7,19 +7,23 @@ import MapScreen from '../screen/MapScreen'
 import RealTimeScreen from '../screen/RealTimeScreen'
 import LoginScreen from '../screen/LoginScreen';
 import RegisterScreen from '../screen/RegisterScreen';
+import TabsBar from '../components/TabsComponents'
+import ChatScreen from '../screen/ChatScreen';
+import PageScreen from '../screen/PageScreen';
+import { navigationRef } from './RootNav';
 
 const Stack = createStackNavigator();
 
 export default class Route extends Component {
     render() {
         return (
-            <NavigationContainer>
+            <NavigationContainer  ref={navigationRef}>
             <Stack.Navigator>
                 <Stack.Screen name="Login" component={LoginScreen} options={{headerShown : false}} />
                 <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown : false}} />
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Maps" component={MapScreen} />
-                <Stack.Screen name="RealTime" component={RealTimeScreen} />
+                <Stack.Screen name="dashboard" component={TabsBar} options={{headerShown : false}} />
+                <Stack.Screen name="chat" component={ChatScreen} options={{headerShown : false}} />
+                <Stack.Screen name="detail" component={PageScreen} options={{headerShown : false}} />
             </Stack.Navigator>
             </NavigationContainer>
         )
