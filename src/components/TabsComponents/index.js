@@ -7,6 +7,8 @@ import RealtimeScreen from '../../screen/RealTimeScreen'
 import Ionicons from 'react-native-vector-icons/AntDesign'
 import Ion from 'react-native-vector-icons/Ionicons'
 import AwsemIcon from 'react-native-vector-icons/FontAwesome'
+import ProfileScreen from '../../screen/ProfileScreen';
+import FriendList from '../../screen/FriendList';
 
 
 const Tab = createBottomTabNavigator()
@@ -30,12 +32,12 @@ export default function TabsBar() {
             <Ion name="chatbox-outline" color={color} size={size}/>
         )}}
         />
-        <Tab.Screen name="Map" component={MapScreen} options={{
+        <Tab.Screen name="Friend" component={FriendList} options={{
             tabBarIcon : ({color,size})=>(
             <Ion name="person-outline" color={color} size={size}/>
         )}}
         />
-        <Tab.Screen name="Realtime" component={RealtimeScreen} options={{
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{
             tabBarIcon : ({color,size})=>(
             <Ion name="settings-sharp" color={color} size={size}/>
         )}}

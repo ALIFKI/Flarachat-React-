@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Image,TextInput, Alert,TouchableOpacity,ToastAndroid,View } from 'react-native';
+import { Image,TextInput, Alert,TouchableOpacity,ToastAndroid,View,ActivityIndicator } from 'react-native';
 import { theme, withGalio,Text,Input,GalioProvider, Button,Toast} from 'galio-framework'
 // import { View,Icon } from 'native-base';
 import LoginStyle from './style'
 import image from '../../images/chatLogin.png'
+import {login} from '../../redux/actions/auth'
 import Awsome from 'react-native-vector-icons/FontAwesome'
+import { connect } from 'react-redux';
 class LoginScreen extends Component {
     constructor(props){
         super(props)
@@ -37,8 +39,44 @@ class LoginScreen extends Component {
          })
         }
       }
-    handleLogin = ()=>{
-
+      handleLogin = ()=>{
+        if (this.state.validate === true) {
+            var data = {
+                username : this.state.username,
+                password : this.state.password
+            }
+            this.setState({
+                isLoading : true
+            })
+            this.props.login(data).then((res)=>{
+                this.setState({
+                    isLoading : false
+                })
+                this.props.navigation.navigate('dashboard')
+            }).catch((err)=>{
+                this.setState({
+                    isLoading : false
+                })
+                    Alert.alert(
+                        'Oopss!!',
+                        err.response.data.msg,
+                        [
+                            { text: 'OK', onPress: () => console.log('OK Pressed') }
+                        ],
+                        { cancelable: false }
+                    )
+            })
+        }
+        else{
+            Alert.alert(
+                'Oopss!!',
+                'Email Invalid',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+            )
+        }
     }
     render() {
         const customTheme = {
@@ -74,7 +112,13 @@ class LoginScreen extends Component {
                         <TouchableOpacity
                         
                         >
-                        <Button color={'#567AF4'} shadowless round onPress={this.handleLogin}>Log in</Button>
+                        <Button color={'#567AF4'} shadowless round onPress={this.handleLogin}>
+                            {
+                                this.state.isLoading ? (
+                                    <ActivityIndicator color={'white'}/>
+                                ) : (<Text style={{color: 'white'}}>Log-In</Text>)
+                            }
+                        </Button>
                         </TouchableOpacity>
                     </View>
                     <View style={LoginStyle.registerTxt}>
@@ -87,5 +131,9 @@ class LoginScreen extends Component {
         )
     }
 }
+const mapStateToProps = state=>({
+    user : state.auth
+})
+const mapDispatchToProps = {login}
 
-export default LoginScreen
+export default connect(mapStateToProps,mapDispatchToProps)(LoginScreen)

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Image,TextInput,TouchableHighlight, Alert,View } from 'react-native';
+import { Image,TextInput,TouchableHighlight, Alert,View,ActivityIndicator } from 'react-native';
 import { theme, withGalio,Text,Input,GalioProvider, Button} from 'galio-framework'
 // import {Icon } from 'native-base';
 import LoginStyle from './style';
 import IonIcon from 'react-native-vector-icons/FontAwesome'
+import { register } from '../../redux/actions/auth'
+import { connect } from 'react-redux';
 class RegisterScreen extends Component {
     constructor(props){
         super(props)
@@ -11,12 +13,63 @@ class RegisterScreen extends Component {
             focus : false,
             username : '',
             email : '',
+            isLoading : false,
             password : '',
             validate : false
         }
     }
     handelRegister = ()=>{
-        this.props.navigation.navigate('dashboard')
+        if(this.state.validate === true){
+            var data = {
+                name : this.state.username,
+                email : this.state.email,
+                password : this.state.password
+            }
+            this.setState({
+                isLoading : true
+            })
+            this.props.register(data).then((res)=>{
+                Alert.alert(
+                    'Success !!',
+                    'Lets Login.. ',
+                    [
+                        { text: 'OK', onPress: () => this.props.navigation.navigate('Login') }
+                    ],
+                    { cancelable: false }
+                )
+                this.setState({
+                    isLoading : false
+                })
+            }).catch((err)=>{
+                var msg = err.response.data.msg
+                msg == `Duplicate entry '${this.state.email}' for key 'users_email_unique'` ? msg="Email Already Used!" : msg=msg
+                Alert.alert(
+                    'Oopss!!',
+                    msg,
+                    [
+                        { text: 'OK', onPress: () => console.log('OK Pressed') }
+                    ],
+                    { cancelable: false }
+                )
+                this.setState({
+                    isLoading : false
+                })
+            })
+        }
+        else{
+            Alert.alert(
+                'Oopss!!',
+                'Email Invalid',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+            )
+            this.setState({
+                isLoading : false
+            })
+        }
+
     }
     validate = (text) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -47,7 +100,7 @@ class RegisterScreen extends Component {
                 <View style={LoginStyle.header}>
                         <Text h6 style={LoginStyle.wl}>Lets Start Your Jurney !!</Text>
                         <Text muted>
-                            Create your account and find beautiful books
+                            Lets connect To each Other with Flarachat
                         </Text>
                     </View>
                 <View style={LoginStyle.form}>
@@ -68,7 +121,13 @@ class RegisterScreen extends Component {
                     activeOpacity={0.06}
                     underlayColor="#DDDDDD"
                     >
-                        <Button color={'#567AF4'} shadowless round onPress={this.handelRegister}>Register</Button>
+                        <Button color={'#567AF4'} shadowless round onPress={this.handelRegister}>
+                        {
+                            this.state.isLoading ? (
+                                <ActivityIndicator color={'white'}/>
+                            ) : (<Text style={{color: 'white'}}>Register</Text>)
+                        }
+                        </Button>
                     </TouchableHighlight>
                     </View>
                     <View style={LoginStyle.registerTxt}>
@@ -93,4 +152,8 @@ class RegisterScreen extends Component {
     }
 }
 
-export default RegisterScreen
+const mapStateToProps = state=>({
+    user : state.auth
+})
+const mapDispatchToProps = {register}
+export default connect(mapStateToProps,mapDispatchToProps)(RegisterScreen)

@@ -21,8 +21,8 @@ const style = StyleSheet.create({
         alignItems : 'center'
     },
     chatWrapper : {
-        display : 'flex',
-        paddingTop : 30,
+        // display : 'flex',
+        paddingBottom : 100,
         padding : 16,
         backgroundColor : 'white',
         borderTopLeftRadius : 50,
@@ -83,7 +83,7 @@ const style = StyleSheet.create({
         backgroundColor : '#F7F8FD',
         left : 0,
         right : 0,
-        bottom : 10,
+        bottom : 0,
         margin : 16,
         borderRadius : 10
     },

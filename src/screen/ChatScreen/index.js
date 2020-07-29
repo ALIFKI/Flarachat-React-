@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
-import { Text, View,TouchableOpacity,Image } from 'react-native'
+import { Text, View,TouchableOpacity,Image,FlatList } from 'react-native'
 import {Input} from 'galio-framework'
 import style from './style';
+import io from 'socket.io-client'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import { ScrollView } from 'react-native-gesture-handler';
 import { GiftedChat } from 'react-native-gifted-chat';
+import axios from 'axios'
+import {API_URL} from '@env'
 import felin from '../../images/felin.jpg'
-export default class ChatScreen extends Component {
+import { connect } from 'react-redux';
+import { getHome } from '../../redux/actions/home'
+class ChatScreen extends Component {
     constructor(props){
         super(props)
         this.state = {
             data : [
                 {
                     id : 2,
-                    message : 'hi Whats app',
+                    messages : 'start the chat',
                     user_id : 4,
                     send_to : 2,
                 },
@@ -24,18 +29,68 @@ export default class ChatScreen extends Component {
                     send_to : 4,
                 },
               ],
-            txt : ''
+            txt : '',
+            selectedId : null
         }
     }
     handleSubmit = ()=>{
-        const msg = {
-            id : 4,
-            message : this.state.txt,
-            user_id : 2,
-            send_to : 4,
+        axios({
+            method : 'POST',
+            headers : {
+                Authorization :  this.props.user.auth.token
+            },
+            url : `http://192.168.43.124:3000/api/chat`,
+            data : {
+                messages : this.state.txt,
+                sendTo : this.props.route.params.id
+            }
+        }).then((res)=>{
+            this.setState({
+                txt : ''
+            })
+        })
+    }
+    componentDidMount(){
+        console.log(this.props.route.params)
+        this.socket = io('http://192.168.43.124:3000')
+        this.socket.on('chat',(msg)=>{
+            this.setState({
+                data : [msg,...this.state.data]
+            })
+            console.log(msg)
+        })
+        axios({
+            method : 'GET',
+            headers : {
+              Authorization : this.props.user.auth.token 
+            },
+            url : `http://192.168.43.124:3000/api/chat/${this.props.route.params.id}`,
+        }).then((res)=>{
+            console.log(res)
+            if(res.data.data.length > 1){
+                this.setState({
+                    data : res.data.data.reverse()
+                },()=>{
+                    console.log(this.state.data)
+                })
+            }
+        }).catch((err)=>{
+            console.log(err.response)
+        })
+    }
+    componentWillUnmount(){
+        this.socket.disconnect()
+        this.socket.removeAllListeners()
+        this.handleGetChatList()
+    }
+    handleGetChatList = ()=>{
+        var data = {
+            token : this.props.user.auth.token
         }
-        this.setState({
-            data : [...this.state.data,msg]
+        this.props.getHome(data).then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)
         })
     }
     render() {
@@ -43,46 +98,53 @@ export default class ChatScreen extends Component {
             <View style={style.content}>
                 <View style={style.header}>
                     <IonIcon name="arrow-back-outline" size={24}/>
-                    <Text style={style.username}>Username </Text>
+                    <Text style={style.username}> {this.props.route.params.name} </Text>
                     <TouchableOpacity
-                    onPress={()=>{
-                        this.props.navigation.navigate('detail')
-                    }}>
-                    <Image source={felin} style={style.profile}/>
+                    // onPress={()=>{
+                    //     this.props.navigation.navigate('detail')
+                    // }}
+                    >
+                    <Image source={{uri : `${API_URL}uploads/${this.props.route.params.image}`}} style={style.profile}/>
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={style.chatWrapper}>
-                    {
-                        this.state.data.map((row,index)=>{
-                            return row.user_id === 2 ? (
-                                <View style={style.chatBodySelf} key={index}>
-                                    <View style={style.chatBubbleSelf}>
-                                        <Text style={style.messageMe}>
-                                            {row.message}
-                                        </Text>
-                                    </View>
-                                    <Text style={style.time}>
-                                        5.00pm
-                                    </Text>
-                                </View>
-                            ) : (
-                                <View style={style.chatBody} key={index}>
-                                    <View style={style.chatBubbleSend}>
-                                        <Text style={style.messageSend}>
-                                            {row.message}
-                                        </Text>
-                                    </View>
-                                    <Text style={style.time}>
-                                        5.00pm
-                                    </Text>
-                                </View>
-                            )
-                        })
-                    }
-                    </ScrollView>
+                <View style={style.chatWrapper}>
+                  <FlatList
+                    style={{borderRadius : 30}}
+                    inverted={true}
+                    data={this.state.data}
+                    renderItem={({item : row})=>{
+                        return (
+                            row.id_users == this.props.user.auth.id ?
+                            <View style={style.chatBodySelf}>
+                            <View style={style.chatBubbleSelf}>
+                                <Text style={style.messageMe}>
+                                    {row.messages}
+                                </Text>
+                            </View>
+                            <Text style={style.time}>
+                                5.00 pm
+                            </Text>
+                            </View> 
+                            : 
+                            <View style={style.chatBody}>
+                            <View style={style.chatBubbleSend}>
+                                <Text style={style.messageSend}>
+                                    {row.messages}
+                                </Text>
+                            </View>
+                            <Text style={style.time}>
+                                5.00 pm
+                            </Text>
+                        </View>
+                        )
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                    extraData={this.state.selectedId}
+                />
+                </View>
                 <View style={style.inputMessage}>
                     <IonIcon name="happy-outline" size={30} style={style.icon} />
-                    <Input placeholder="Write Your Message" rounded borderless={true} style={style.messageInput} placeholderTextColor={'#D4D7DE'} onChangeText={text=>this.setState({txt : text})}/>
+                    <Input placeholder="Write Your Message" rounded borderless={true} style={style.messageInput} placeholderTextColor={'#D4D7DE'} onChangeText={text=>this.setState({txt : text})} value={this.state.txt}/>
                     <TouchableOpacity
                     onPress={this.handleSubmit}
                     style={style.send}>
@@ -93,3 +155,8 @@ export default class ChatScreen extends Component {
         )
     }
 }
+const mapStateToProps = state=>({
+    user :state.auth
+})
+const mapDispatchToProps = {getHome}
+export default connect(mapStateToProps,mapDispatchToProps)(ChatScreen)

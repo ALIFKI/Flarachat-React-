@@ -29,14 +29,21 @@ import HomeScreen from './src/screen/HomeScreen';
 import MapScreen from './src/screen/MapScreen'
 import RealTimeScreen from './src/screen/RealTimeScreen'
 import Route from './src/routes'
+import { Provider } from 'react-redux';
+import store from './src/redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
+
+const {storeCon,persistor} = store()
 
 const Stack = createStackNavigator();
 
 const App: () => React$Node = () => {
   return (
-    <>
-    <Route/>
-    </>
+    <Provider store={storeCon}>
+      <PersistGate persistor={persistor}>
+        <Route/>
+      </PersistGate>
+    </Provider>
   );
 };
 

@@ -11,21 +11,36 @@ import TabsBar from '../components/TabsComponents'
 import ChatScreen from '../screen/ChatScreen';
 import PageScreen from '../screen/PageScreen';
 import { navigationRef } from './RootNav';
+import { connect } from 'react-redux';
 
 const Stack = createStackNavigator();
 
-export default class Route extends Component {
+class Route extends Component {
     render() {
         return (
             <NavigationContainer  ref={navigationRef}>
             <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginScreen} options={{headerShown : false}} />
-                <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown : false}} />
-                <Stack.Screen name="dashboard" component={TabsBar} options={{headerShown : false}} />
-                <Stack.Screen name="chat" component={ChatScreen} options={{headerShown : false}} />
-                <Stack.Screen name="detail" component={PageScreen} options={{headerShown : false}} />
+                {
+                    this.props.user.isLogin ?(
+                        <>
+                        <Stack.Screen name="dashboard" component={TabsBar} options={{headerShown : false}} />
+                        <Stack.Screen name="chat" component={ChatScreen} options={{headerShown : false}} />
+                        <Stack.Screen name="detail" component={PageScreen} options={{headerShown : false}} />
+                        <Stack.Screen name="maps" component={MapScreen} options={{headerShown : false}} />
+                        </>
+                    ) : (
+                        <>
+                        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown : false}} />
+                        <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown : false}} />
+                        </>
+                    )
+                }
             </Stack.Navigator>
             </NavigationContainer>
         )
     }
 }
+const mapStateToProps = state=>({
+    user : state.auth
+})
+export default connect(mapStateToProps)(Route)

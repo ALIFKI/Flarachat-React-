@@ -10,7 +10,7 @@ export default class BackButton extends Component {
             <TouchableHighlight
             activeOpacity={0.6}
             underlayColor="#DDDDDD"
-            onPress={() => RootNavigation.navigate('chat')}
+            onPress={() => RootNavigation.navigate('Friend')}
             style={style.backButton}
            >
            <View style={style.touch} >

@@ -11,13 +11,14 @@ const style = StyleSheet.create({
     },
     profile : {
         width : width,
+        zIndex : 20,
         height : height/2.4
     },
     header : {
         display : 'flex',
         flexDirection : 'column',
-        maxWidth : width,
-        maxHeight : height/2.4
+        // width : width,
+        // height : height/2.4
     },
     action : {
         display : 'flex',
@@ -66,6 +67,20 @@ const style = StyleSheet.create({
         right : 0,
         top : 0,
         bottom : 0
+    },
+    logoutBtn : {
+        position : 'absolute',
+        top : 0,
+        zIndex : 20,
+        right : -10,
+        backgroundColor : 'white',
+        height : 60,
+        width : 60,
+        display : 'flex',
+        flexDirection : 'column',
+        alignItems : 'center',
+        justifyContent : 'center',
+        borderRadius : 30
     }
 })
 

@@ -19,7 +19,7 @@ export default class RealtimeScreen extends Component {
     }
     componentDidMount(){
         this.socket = io('http://192.168.43.124:3000')
-        this.socket.on('products',(msg)=>{
+        this.socket.on('chat',(msg)=>{
             this.setState({
                 data : [...this.state.data,msg]
             })
