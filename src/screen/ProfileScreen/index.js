@@ -21,6 +21,7 @@ class ProfileScreen extends Component {
         })
     }
     render() {
+        const data = this.props.user.auth
         return (
             <View style={style.container}>
                 <TouchableOpacity 
@@ -40,9 +41,11 @@ class ProfileScreen extends Component {
                                 this.props.user.auth.name
                             }
                         </Text>
-                        <View style={style.icon}>
+                        <TouchableOpacity 
+                        onPress={()=>{this.props.navigation.navigate('maps',{user : data})}} 
+                        style={style.icon}>
                             <IonIcon name="navigate" size={25} style={{color: 'white'}}/>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={style.content}>

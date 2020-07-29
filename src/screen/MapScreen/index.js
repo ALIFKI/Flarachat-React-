@@ -5,17 +5,26 @@ import style from './style'
 import felin from '../../images/felin.jpg'
 import IonIcon from  'react-native-vector-icons/Ionicons'
 import {API_URL} from '@env'
+import { connect } from 'react-redux';
 
-export default class MapScreen extends Component {
+class MapScreen extends Component {
     constructor(props){
         super(props)
+        this.state = {
+            loc : {}
+        }
     }
     componentDidMount(){
-
+        // this.watchID = navigator.geolocation.watchPosition((position) => {
+        //     let region = {
+        //       latitude:       position.coords.latitude,
+        //       longitude:      position.coords.longitude,
+        //     }
+        //   }, (error)=>console.log(error));
     }
     render() {
         const data = this.props.route.params.user
-        const loc = JSON.parse(this.props.route.params.user.loc)
+        const loc = data.id == this.props.user.auth.id ? JSON.parse(this.props.route.params.user.loc) : JSON.parse(this.props.route.params.user.loc)
         return (
             <View style={style.content}>
                 <TouchableOpacity
@@ -30,7 +39,12 @@ export default class MapScreen extends Component {
                     longitude: loc.long,
                     latitudeDelta: 0.0002,
                     longitudeDelta: 0.0091,
+                    
                     }}
+                    showsCompass={true}
+                    showsBuildings={true}
+                    showsTraffic={true}
+                    showsIndoors={true}
                 >
                         <Marker
                             draggable
@@ -54,5 +68,8 @@ export default class MapScreen extends Component {
         )
     }
 }
+const mapStateToProps = state=>({
+    user : state.auth
+})
 
-
+export default connect(mapStateToProps)(MapScreen)
