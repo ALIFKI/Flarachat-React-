@@ -42,13 +42,13 @@ class HomeScreen extends Component {
                                     {
                                         id : row.id_sendTo == this.props.user.auth.id? row.id_users : row.id_sendTo ,
                                         name : row.sender == this.props.user.auth.name? row.reciver : row.sender,
-                                        image : row.sender == this.props.user.auth.name? row.reciverImage : row.reciverImage
+                                        image : row.sender == this.props.user.auth.name? row.reciverImage : row.senderImage
                                     })}}
                                     style={styles.chatBody}>
                                         {row.sender == this.props.user.auth.name?(
                                                 <Image source={{uri : `${API_URL}uploads/${row.reciverImage}`}} style={styles.profile}/>
                                         ): (
-                                        <Image source={{uri : `${API_URL}uploads/${row.reciverImage}`}} style={styles.profile}/>
+                                                <Image source={{uri : `${API_URL}uploads/${row.senderImage}`}} style={styles.profile}/>
                                             )
                                         }
                                         <View style={styles.chatWrap}>

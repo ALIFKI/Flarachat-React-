@@ -69,6 +69,28 @@ const auth = (state = initialState,action) =>{
             isLoading : true,
             successMsg : action.payload.data.msg
         }
+        case 'UPDATE_PENDING' :
+        return {
+            ...state,
+            isLoading : true,
+            errorMsg : ''
+        }
+        case 'UPDATE_REJECTED' :
+        return {
+            ...state,
+            isLoading : false,
+            errorMsg : action.payload.response.data.msg
+        }
+        case 'UPDATE_FULFILLED' :
+            console.log(action.payload.data.data)
+        return {
+            ...state,
+            isLoading : false,
+            auth : {
+                ...state.auth,
+                ...action.payload.data.data
+            }
+        }
         default:
             return state
     }

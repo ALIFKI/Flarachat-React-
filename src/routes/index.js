@@ -12,6 +12,7 @@ import ChatScreen from '../screen/ChatScreen';
 import PageScreen from '../screen/PageScreen';
 import { navigationRef } from './RootNav';
 import { connect } from 'react-redux';
+import EditeScreen from '../screen/EditeScreen';
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ class Route extends Component {
                         <Stack.Screen name="chat" component={ChatScreen} options={{headerShown : false}} />
                         <Stack.Screen name="detail" component={PageScreen} options={{headerShown : false}} />
                         <Stack.Screen name="maps" component={MapScreen} options={{headerShown : false}} />
+                        <Stack.Screen name="edit" component={EditeScreen} options={{headerShown : false}} />
                         </>
                     ) : (
                         <>
