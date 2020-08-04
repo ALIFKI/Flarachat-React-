@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
             borderRadius : 40
         },
         chatWrap : {
-            minWidth : 180,
-            maxWidth : 180,
+            minWidth : 170,
+            maxWidth : 170,
             display : 'flex',
             flexDirection : 'column',
             justifyContent : 'space-around',
@@ -53,24 +53,31 @@ const styles = StyleSheet.create({
             color : '#333B52'
         },
         chat : {
-            maxWidth : 190,
+            maxWidth : 170,
             fontFamily : 'Poppins-Regular',
             fontSize : 12,
             color : '#BFC2C9'
         },
         time : {
             display : 'flex',
+            minWidth : 50,
+            minHeight : 50,
             flexDirection : 'column',
             justifyContent : 'space-between',
             alignItems : 'center'
         },
         hours : {
+            top : 0,
+            position : 'absolute',
             fontFamily : 'Poppins-Regular',
             fontSize : 10,
-            color : '#BFC2C9'
+            color : '#BFC2C9',
+            textAlign : 'center'
         },
         unread : {
+            top : 20,
             marginTop : 10,
+            position : 'absolute',
             height : 25,
             width : 25,
             borderRadius : 5,

@@ -42,6 +42,10 @@ const home = (state = initialState,action) =>{
             friend : action.payload.data.data
 
         }
+        case "ACC" : 
+        return {
+            ...state,
+        }
         default:
             return state
     }

@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { getFriend } from '../../redux/actions/home'
 import {API_URL} from '@env'
 import Axios from 'axios'
+import ListFriend from '../../components/ListFriend'
 
 class FriendList extends Component {
     constructor(props){
@@ -43,7 +44,7 @@ class FriendList extends Component {
             headers : {
               Authorization : this.props.user.auth.token 
             },
-            url : `http://192.168.43.124:3000/api/friend`,
+            url : `${API_URL}api/friend`,
             data : {
                 email : this.state.text
             }
@@ -63,43 +64,52 @@ class FriendList extends Component {
                 modalVisible : false
             })
         }).catch((err)=>{
-            console.log(err.response)
+            Alert.alert(
+                'Ooops!!',
+                'email id '+this.state.text+' is incorrect',
+                [
+                    { text: 'OK', onPress: () => console.log('OK Pressed') }
+                ],
+                { cancelable: false }
+            )
+            this.setState({
+                isLoading : false,
+                modalVisible : false
+            })
         })
     }
     render() {
+        const notif = this.props.home.friend.filter((row,index)=>{
+            return row.acc_at == null
+        }).length
+
         return (
+            <>
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Friend</Text>
+                    <Text style={styles.title}>Friends</Text>
                     <TouchableOpacity
                     onPress={()=>{
-                        this.setState({
-                            modalVisible : true
-                        })
+                        this.props.navigation.navigate('notif')
                     }}>
-                    <IonIcon name="add-outline" size={25} style={styles.searchIcon}/>
+                        <IonIcon name="notifications" size={20} style={styles.searchIcon}/>
+                        {
+                            notif >=1?(
+                                <View style={styles.badge}>
+                                </View>
+                            ) : (
+                                <View>
+                                </View>
+                            )
+                        }
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={styles.mainContent}>
                     {
-                        this.props.home.friend.map((row,index)=>{
-                            return <TouchableOpacity
-                                    key={index}
-                                    onPress={()=>{this.props.navigation.navigate('detail',{data : row})}}
-                                    style={styles.chatBody}>
-                                        <Image source={{uri: `${API_URL}uploads/${row.image}`}} style={styles.profile}/>
-                                            <View style={styles.chatWrap}>
-                                                <Text style={styles.sender}>
-                                                    {row.name}
-                                                </Text>
-                                                <Text style={styles.chat}>See details</Text>
-                                            </View>
-                                            <View style={styles.time}>
-                                                <View style={styles.unread}>
-                                                    <IonIcon name="location" size={20} style={{color: 'white'}}/>
-                                                </View>
-                                            </View>
-                                    </TouchableOpacity>
+                        this.props.home.friend.filter((row,index)=>{
+                            return row.acc_at !== null
+                        }).map((row,index)=>{
+                            return <ListFriend key={index} data={row}/>
                         })
                     }
                 </ScrollView>
@@ -116,17 +126,27 @@ class FriendList extends Component {
                             <View style={styles.modalContent}>
                                 <View style={styles.modal}>
                                 <Input placeholder="Enter Email id" rounded borderless={true} placeholderTextColor={'#D4D7DE'} color={'black'} onChangeText={text=>this.setState({text : text})}/>
-                                <Button color={'#567AF4'} shadowless round onPress={this.handleAddFriend}>
-                                    {
-                                        this.state.isLoading ? (
-                                            <ActivityIndicator color={'white'}/>
-                                        ) : (<Text style={{color: 'white'}}>Add</Text>)
-                                    }
-                                </Button>
+                                    <Button color={'#567AF4'} shadowless round onPress={this.handleAddFriend}>
+                                        {
+                                            this.state.isLoading ? (
+                                                <ActivityIndicator color={'white'}/>
+                                            ) : (<Text style={{color: 'white'}}>Add</Text>)
+                                        }
+                                    </Button>
                                 </View>
                             </View>
                     </Modal>
             </View>
+                                <TouchableOpacity 
+                                onPress={()=>{
+                                    this.setState({
+                                        modalVisible : true
+                                    })
+                                }}
+                                style={styles.btnAdd}>
+                                    <IonIcon name="add-outline" size={25} style={{color: 'white'}}/>
+                                </TouchableOpacity>
+                                </>
         )
     }
 }

@@ -97,31 +97,7 @@ const styles = StyleSheet.create({
             height : 150,
             backgroundColor : 'white',
             padding : 16
-        },
-        btnAdd : {
-            position : 'absolute',
-            bottom : 10,
-            right : 10,
-            height : 60,
-            width : 60,
-            borderRadius : 30,
-            backgroundColor : '#567AF4',
-            display : 'flex',
-            flexDirection : 'row',
-            alignItems : 'center',
-            justifyContent : 'center'
-        },
-            badge : {
-                height : 11,
-                width : 11,
-                borderRadius : 10,
-                backgroundColor: 'red',
-                position : 'absolute',
-                right : 5,
-                top : 5,
-                borderColor : 'white',
-                borderWidth : 2
-            }
+        }
 })
 
 module.exports = styles

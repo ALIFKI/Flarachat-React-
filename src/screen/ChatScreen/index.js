@@ -11,6 +11,9 @@ import {API_URL} from '@env'
 import felin from '../../images/felin.jpg'
 import { connect } from 'react-redux';
 import { getHome } from '../../redux/actions/home'
+import { or } from 'react-native-reanimated';
+import moment from 'moment'
+
 class ChatScreen extends Component {
     constructor(props){
         super(props)
@@ -39,7 +42,7 @@ class ChatScreen extends Component {
             headers : {
                 Authorization :  this.props.user.auth.token
             },
-            url : `http://192.168.43.124:3000/api/chat`,
+            url : `${API_URL}api/chat`,
             data : {
                 messages : this.state.txt,
                 sendTo : this.props.route.params.id
@@ -52,22 +55,24 @@ class ChatScreen extends Component {
     }
     componentDidMount(){
         console.log(this.props.route.params)
-        this.socket = io('http://192.168.43.124:3000')
+        this.socket = io(`${API_URL}`)
         this.socket.on('chat',(msg)=>{
-            this.setState({
-                data : [msg,...this.state.data]
-            })
-            console.log(msg)
+            if( this.props.user.auth.id == msg.id_users && this.props.route.params.id == msg.id_sendTo ||
+                this.props.user.auth.id == msg.id_sendTo && this.props.route.params.id == msg.id_users  ){
+                    this.setState({
+                        data : [msg,...this.state.data]
+                    })
+            }
         })
         axios({
             method : 'GET',
             headers : {
               Authorization : this.props.user.auth.token 
             },
-            url : `http://192.168.43.124:3000/api/chat/${this.props.route.params.id}`,
+            url : `${API_URL}api/chat/${this.props.route.params.id}`,
         }).then((res)=>{
             console.log(res)
-            if(res.data.data.length > 1){
+            if(res.data.data.length > 0){
                 this.setState({
                     data : res.data.data.reverse()
                 },()=>{
@@ -122,7 +127,7 @@ class ChatScreen extends Component {
                                 </Text>
                             </View>
                             <Text style={style.time}>
-                                5.00 pm
+                            {moment(row.created_at).fromNow()}
                             </Text>
                             </View> 
                             : 
@@ -133,7 +138,7 @@ class ChatScreen extends Component {
                                 </Text>
                             </View>
                             <Text style={style.time}>
-                                5.00 pm
+                            {moment(row.created_at).fromNow()}
                             </Text>
                         </View>
                         )

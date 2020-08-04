@@ -5,12 +5,15 @@ import style from './style'
 import * as RootNavigation from '../../routes/RootNav';
 
 export default class BackButton extends Component {
+    constructor(props){
+        super(props)
+    }
     render() {
         return (
             <TouchableHighlight
             activeOpacity={0.6}
             underlayColor="#DDDDDD"
-            onPress={() => RootNavigation.navigate('Friend')}
+            onPress={() => RootNavigation.navigate(this.props.backTo)}
             style={style.backButton}
            >
            <View style={style.touch} >

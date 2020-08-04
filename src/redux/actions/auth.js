@@ -37,19 +37,16 @@ export const register = data =>{
     }
 }
 
-export const updateUser = data =>{
+export const updateUser = (data,token) =>{
     return {
         type : 'UPDATE',
         payload : 
         axios({
             method: 'PUT',
             url : `${API_URL}api/users`,
-            data : {
-                bio : data.bio,
-                name : data.name,
-            },
+            data : data,
             headers : {
-                Authorization : data.token
+                Authorization : token
             }
         })
     }

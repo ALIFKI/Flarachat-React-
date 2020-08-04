@@ -5,15 +5,22 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 // import { ScrollView } from 'react-native-gesture-handler';
 import image from '../../images/felin.jpg'
 import meta from '../../images/meta.jpg'
+import io from 'socket.io-client'
 import { connect } from 'react-redux'
 import { getHome } from '../../redux/actions/home'
 import {API_URL} from '@env'
+import moment from 'moment'
+
 class HomeScreen extends Component {
     constructor(props){
         super(props)
     }
 
     componentDidMount(){
+        this.socket = io(`${API_URL}`)
+        this.socket.on('chat',(msg)=>{
+            this.handleGetChatList()
+        })
         this.handleGetChatList()
     }
     handleGetChatList = ()=>{
@@ -61,7 +68,7 @@ class HomeScreen extends Component {
                                             <Text style={styles.chat}>{row.messages}... </Text>
                                         </View>
                                         <View style={styles.time}>
-                                            <Text style={styles.hours}>5 Hours</Text>
+                                        <Text style={styles.hours}>{moment(row.created_at).fromNow(true)}</Text>
                                             <View style={styles.unread}>
                                                 <Text style={{color : 'white',fontSize : 10,fontFamily :'Poppins-Bold'}}>1</Text>
                                             </View>

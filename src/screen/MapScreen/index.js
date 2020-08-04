@@ -8,6 +8,7 @@ import {API_URL} from '@env'
 import { connect } from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import Axios from 'axios';
+import moment from 'moment'
 
 class MapScreen extends Component {
     constructor(props){
@@ -67,14 +68,6 @@ class MapScreen extends Component {
                 })
             }
         }).then((res)=>{
-            Alert.alert(
-                'Success',
-                'Update Loc',
-                [
-                    { text: 'OK', onPress: () => console.log('OK Pressed') }
-                ],
-                { cancelable: false }
-            )
         }).catch((err)=>{
             console.log(err.response)
         })
@@ -119,7 +112,7 @@ class MapScreen extends Component {
                         <Image source={{uri: `${API_URL}uploads/${data.image}`}} style={style.profile}/>
                         <View style={style.detail}>
                         <Text style={style.name}> {data.name} </Text>
-                        <Text style={style.time}> {data.updated_at} </Text>
+                        <Text style={style.time}> {moment(data.created_at).fromNow()} </Text>
                         <Text style={style.time}>  </Text>
                         </View>
                     </View>

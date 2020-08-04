@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View,Image,ScrollView,TouchableOpacity,Alert } from 'react-native'
 import style from './style'
+import ImagePicker from 'react-native-image-picker';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import BackButton from '../../components/backComponets'
 import {logout,updateUser} from '../../redux/actions/auth'
@@ -14,7 +15,11 @@ class EditeScreen extends Component {
         this.state= {
             LogoutLoading : false,
             name : 'Flarista',
-            bio : ''
+            bio : '',
+            srcImg : {},
+            uri : null,
+            fileName : '',
+
         }
     }
     handleLogout = ()=>{
@@ -24,12 +29,21 @@ class EditeScreen extends Component {
         })
     }
     handleSubmit = ()=>{
-        var data = {
-            name : this.state.name,
-            bio : this.state.bio,
-            token : this.props.user.auth.token
+        var formData = new FormData();
+        formData.append('bio',this.state.bio)
+        formData.append('name',this.state.name)
+        if(this.state.uri){
+            formData.append('image',{
+                uri: this.state.srcImg.uri,
+                type: 'image/jpeg',
+                name: this.state.fileName,
+            })
         }
-        this.props.updateUser(data).then((res)=>{
+
+        var data = {
+            token : this.props.user.auth.token,
+        }
+        this.props.updateUser(formData,data.token).then((res)=>{
             // console.log(res)
             Alert.alert(
                 'Success!!',
@@ -43,6 +57,35 @@ class EditeScreen extends Component {
             console.log(err.response)
         })
     }
+    choosePicture = () => {
+        var options = {
+            title: 'Choose Image',
+            storageOptions: {
+              skipBackup: true,
+              path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            // console.log('Response = ', response);
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+              console.log(response);
+              this.setState({
+                srcImg: { uri: response.uri },
+                uri: response.uri,
+                fileName: response.fileName
+              });
+            }
+        });
+    }
     componentDidMount(){
         this.setState({
             bio : this.props.user.auth.bio,
@@ -53,25 +96,25 @@ class EditeScreen extends Component {
         const data = this.props.user.auth
         return (
             <View style={style.container}>
-                <TouchableOpacity 
-                onPress={this.handleSubmit}
-                style={style.logoutBtn}>
-                    <IonIcon name="bookmark-outline" size={25}/>
-                </TouchableOpacity>
                 <ScrollView>
                 <View style={style.header}>
-                    <Image source={{uri : `${API_URL}uploads/${this.props.user.auth.image}`}} style={style.profile}/>
+                    {
+                        this.state.uri ? 
+                        (<Image source={{uri : this.state.uri}} style={style.profile}/>) 
+                        : 
+                        (<Image source={{uri : `${API_URL}uploads/${this.props.user.auth.image}`}} style={style.profile}/>)
+                    }
                     <View style={style.action}>
                         <TouchableOpacity 
-                        onPress={()=>{this.props.navigation.navigate('edit')}}
+                        onPress={this.choosePicture}
                         style={style.icon}>
-                            <IonIcon name="create-outline" size={25} style={{color: 'white'}}/>
+                            <IonIcon name="image-outline" size={25} style={{color: 'white'}}/>
                         </TouchableOpacity>
                         <Input placeholder="name" value={this.state.name} rounded borderless={true} placeholderTextColor={'#D4D7DE'} color={'black'} onChangeText={text=>this.setState({name : text})}/>
                         <TouchableOpacity 
-                        onPress={()=>{this.props.navigation.navigate('maps',{user : data})}} 
+                        onPress={this.handleSubmit} 
                         style={style.icon}>
-                            <IonIcon name="navigate" size={25} style={{color: 'white'}}/>
+                            <IonIcon name="bookmark-outline" size={25} style={{color: 'white'}}/>
                         </TouchableOpacity>
                     </View>
                 </View>

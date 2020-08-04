@@ -13,6 +13,7 @@ import PageScreen from '../screen/PageScreen';
 import { navigationRef } from './RootNav';
 import { connect } from 'react-redux';
 import EditeScreen from '../screen/EditeScreen';
+import NotifScreen from '../screen/NotifScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ class Route extends Component {
                         <Stack.Screen name="detail" component={PageScreen} options={{headerShown : false}} />
                         <Stack.Screen name="maps" component={MapScreen} options={{headerShown : false}} />
                         <Stack.Screen name="edit" component={EditeScreen} options={{headerShown : false}} />
+                        <Stack.Screen name="notif" component={NotifScreen} options={{headerShown : false}} />
                         </>
                     ) : (
                         <>

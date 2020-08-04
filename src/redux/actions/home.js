@@ -29,3 +29,17 @@ export const getFriend = (data)=>{
     }
 }
 
+export const accFriend = (data)=>{
+    return {
+        type : "ACC",
+        payload : 
+        axios({
+            method : 'POST',
+            url : `${API_URL}api/friend/${data.id}`,
+            headers : {
+                Authorization : data.token
+            }
+        })
+    }
+}
+

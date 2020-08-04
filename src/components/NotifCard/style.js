@@ -3,42 +3,23 @@ import { color } from 'react-native-reanimated';
 
 
 const styles = StyleSheet.create({
-    content : {
+    notifCard : {
         padding : 16,
-        backgroundColor : '#fff'
-    },
-    header : {
-        display : 'flex',
-        flexDirection : 'row',
-        justifyContent : 'space-between',
-        alignItems : 'center'
-    },
-    title : {
-        fontFamily : 'Poppins-Bold',
-        fontSize : 25,
-        color : '#333B52'
-    },
-    searchIcon : {
-        padding : 5
-    },
-    mainContent : {
-        display : 'flex',
-        flexDirection : 'column',
-        paddingTop : 10
-    },
-    chatBody : {
+        borderColor : '#F8F9F9',
+        borderWidth : 3,
+        borderRadius : 5,
         marginTop : 25,
         display : 'flex',
         flexDirection : 'row',
-        justifyContent : 'space-between',
-        alignItems : 'center'
+        alignItems : 'flex-start'
     },
         profile : {
-            height : 75,
-            width : 75,
+            height : 55,
+            width : 55,
             borderRadius : 40
         },
-        chatWrap : {
+        notifBody : {
+            marginLeft : 20,
             minWidth : 180,
             maxWidth : 180,
             display : 'flex',
@@ -52,7 +33,7 @@ const styles = StyleSheet.create({
             fontSize : 16,
             color : '#333B52'
         },
-        chat : {
+        msg : {
             maxWidth : 190,
             fontFamily : 'Poppins-Regular',
             fontSize : 12,
@@ -121,6 +102,36 @@ const styles = StyleSheet.create({
                 top : 5,
                 borderColor : 'white',
                 borderWidth : 2
+            },
+            action : {
+                display : 'flex',
+                flexDirection : 'row',
+                justifyContent : 'space-between',
+                alignItems : 'center'
+            },
+                actionBtn : {
+                    minWidth : 100,
+                    padding : 5,
+                    display : 'flex',
+                    flexDirection : 'column',
+                    justifyContent : 'center',
+                    alignItems : 'center',
+                    backgroundColor : 'white',
+                    borderRadius : 30,
+                    margin : 1
+                },
+            gradient : {
+                margin : 5,
+                borderRadius : 30,
+                marginTop : 20,
+                minWidth: 100, 
+                alignItems: 'center', 
+                justifyContent: 'center',
+            },
+            buttonText: {
+                textAlign: 'center',
+                fontFamily : 'Poppins-Regular',
+                fontSize : 12
             }
 })
 
