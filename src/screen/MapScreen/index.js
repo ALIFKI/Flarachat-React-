@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Image, TouchableOpacity,Alert } from 'react-native'
+import { Text, View, StyleSheet, Image, TouchableOpacity,Alert,Dimensions } from 'react-native'
 import MapView,{ Marker, AnimatedRegion } from 'react-native-maps';
 import style from './style'
 import felin from '../../images/felin.jpg'
@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import Geolocation from '@react-native-community/geolocation';
 import Axios from 'axios';
 import moment from 'moment'
+import {updateUser} from '../../redux/actions/auth'
+
 
 class MapScreen extends Component {
     constructor(props){
@@ -19,26 +21,36 @@ class MapScreen extends Component {
             long : 0,
             mapRegion: { latitude: 37.78825, longitude: -122.4324, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
         }
+        const window = Dimensions.get('window');
+        const { width, height } = window;
+        const longitudeDelta = 0.0922 + (width / height)
     }
     handleMapRegionChange = mapRegion => {
         this.setState({ mapRegion });
     };
     componentDidMount(){
-        // this.watchID = navigator.geolocation.watchPosition((position) => {
-        //     let region = {
-        //       latitude:       position.coords.latitude,
-        //       longitude:      position.coords.longitude,
-        //     }
-        //   }, (error)=>console.log(error));
-        // this.setState({
-        //     lat : JSON.parse(this.props.route.params.user.loc).lat,
-        //     long : JSON.parse(this.props.route.params.user.loc).long
-        // })
+        this.handleGetLoc()
+    }
+    componentWillUnmount(){
+        this.handleUpdateLoc()
+    }
+    handleGetLoc = ()=>{
+        const loc = JSON.parse(this.props.route.params.user.loc)
+        this.setState({
+            lat : loc.lat,
+            long : loc.long
+        })
         Geolocation.getCurrentPosition((loc)=>{
             console.log(loc)
             this.setState({
                     lat : loc.coords.latitude,
                     long : loc.coords.longitude
+            },()=>{
+                this.map.animateToRegion({
+                    latitude: this.state.lat,
+                    longitude: this.state.long,
+                    latitudeDelta: 0.0002,
+                    longitudeDelta: 0.0091}, 2000)
             })
             // this.map.animateToRegion({
             //     latitude: coords.latitude,
@@ -51,23 +63,18 @@ class MapScreen extends Component {
         {enableHighAccuracy: true, timeout: 50000, maximumAge: 1000},
         )
     }
-    componentWillUnmount(){
-        this.handleUpdateLoc()
-    }
     handleUpdateLoc = ()=>{
-        Axios({
-            method : 'PUT',
-            headers : {
-              Authorization : this.props.user.auth.token 
-            },
-            url : `http://192.168.43.124:3000/api/users`,
-            data : {
-                loc : JSON.stringify({
-                    lat : this.state.lat,
-                    long : this.state.long,
-                })
-            }
-        }).then((res)=>{
+        
+        var content = {
+            loc : JSON.stringify({
+                lat : this.state.lat,
+                long : this.state.long,
+            }),
+            updated_at : moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+        }
+        
+        this.props.updateUser(content,this.props.user.auth.token).then((res)=>{
+            console.log('Update loc done')
         }).catch((err)=>{
             console.log(err.response)
         })
@@ -82,10 +89,11 @@ class MapScreen extends Component {
                 style={style.backBtn}>
                     <IonIcon name="arrow-back" size={27}/>
                 </TouchableOpacity>
-                {
-                    this.state.lat == 0 ? (<Text>Loading</Text>):(
+                {/* {
+                    this.state.lat == 0 ? (<Text>Loading</Text>):( */}
                         <MapView
-                        showsUserLocation 
+                        // showsUserLocation
+                        ref={map => this.map = map} 
                         style={style.maps}
                         initialRegion={{
                         latitude: data.id == this.props.user.auth.id ? this.state.lat : loc.lat,
@@ -97,23 +105,32 @@ class MapScreen extends Component {
                         // onMapReady={}
                     >
                             <Marker
+                                onPress={()=>{console.log(data.updated_at)}}
                                 draggable
                                 coordinate={{latitude : data.id == this.props.user.auth.id ? this.state.lat : loc.lat, 
-                                    longitude: data.id == this.props.user.auth.id ? this.state.long : loc.long}}
+                                longitude: data.id == this.props.user.auth.id ? this.state.long : loc.long}}
                                 title={data.name}
-                                // description={'Hdsajljas'}
                                 onDragEnd={(e) => console.log(e)}
-                            />
+                            >
+                                <View style={style.markerOuter}>
+                                <Image
+                                source={{uri : `${API_URL}uploads/${data.image}`}}
+                                style={style.marker}
+                                />
+                                <View style={style.dot}>
+                                    </View>
+                                </View>
+                            </Marker>
                     </MapView>
-                    )
-                } 
+                    {/* )
+                }  */}
                 <View style={style.card}>
                     <View style={style.profileHead}>
                         <Image source={{uri: `${API_URL}uploads/${data.image}`}} style={style.profile}/>
                         <View style={style.detail}>
                         <Text style={style.name}> {data.name} </Text>
-                        <Text style={style.time}> {moment(data.created_at).fromNow()} </Text>
-                        <Text style={style.time}>  </Text>
+                        <Text style={style.time}> {moment(data.updated_at).fromNow()} </Text>
+                        <Text style={style.time}> </Text>
                         </View>
                     </View>
                 </View>
@@ -124,5 +141,5 @@ class MapScreen extends Component {
 const mapStateToProps = state=>({
     user : state.auth
 })
-
-export default connect(mapStateToProps)(MapScreen)
+const mapDispatchToProps = {updateUser}
+export default connect(mapStateToProps,mapDispatchToProps)(MapScreen)

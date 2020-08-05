@@ -19,7 +19,13 @@ class NotifScreen extends Component {
                     </TouchableOpacity>
                 </View>
                         <ScrollView style={styles.mainContent}>
-                           
+                           {
+                               this.props.home.friend.filter((row,index)=>{
+                                   return row.acc_at == null
+                               }).map((row,index)=>{
+                                   return <NotifCard data={row} key={index}/>
+                               })
+                           }
                         </ScrollView>
             </View>
             <BackButton backTo={'Friend'}/>
@@ -28,7 +34,8 @@ class NotifScreen extends Component {
     }
 }
 const mapStateToProps = state=>({
-    user : state.auth
+    user : state.auth,
+    home : state.home
 })
 
 export default connect(mapStateToProps)(NotifScreen)

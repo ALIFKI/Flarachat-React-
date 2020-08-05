@@ -4,14 +4,10 @@ import {Input} from 'galio-framework'
 import style from './style';
 import io from 'socket.io-client'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-import { ScrollView } from 'react-native-gesture-handler';
-import { GiftedChat } from 'react-native-gifted-chat';
 import axios from 'axios'
 import {API_URL} from '@env'
-import felin from '../../images/felin.jpg'
 import { connect } from 'react-redux';
 import { getHome } from '../../redux/actions/home'
-import { or } from 'react-native-reanimated';
 import moment from 'moment'
 
 class ChatScreen extends Component {
@@ -54,13 +50,14 @@ class ChatScreen extends Component {
         })
     }
     componentDidMount(){
-        console.log(this.props.route.params)
         this.socket = io(`${API_URL}`)
         this.socket.on('chat',(msg)=>{
             if( this.props.user.auth.id == msg.id_users && this.props.route.params.id == msg.id_sendTo ||
                 this.props.user.auth.id == msg.id_sendTo && this.props.route.params.id == msg.id_users  ){
                     this.setState({
                         data : [msg,...this.state.data]
+                    },()=>{
+                        this.handleReadAll()
                     })
             }
         })
@@ -81,6 +78,20 @@ class ChatScreen extends Component {
             }
         }).catch((err)=>{
             console.log(err.response)
+        })
+        this.handleReadAll()
+    }
+    handleReadAll = ()=>{
+        axios({
+            method : 'PUT',
+            headers : {
+                Authorization : this.props.user.auth.token
+            },
+            url : `${API_URL}api/chat/${this.props.route.params.id}`,
+        }).then((res)=>{
+
+        }).catch((err)=>{
+            console.log(err)
         })
     }
     componentWillUnmount(){

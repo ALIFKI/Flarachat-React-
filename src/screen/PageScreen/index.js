@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 
 class PageScreen extends Component {
     constructor(props){
-        super(props)
+        super()
     }
     componentDidMount(){
         console.log(this.props.route.params)
@@ -22,8 +22,8 @@ class PageScreen extends Component {
             image   : data.friendImage,
             loc     : data.friendLoc,
             bio     : data.friendBio,
-            created_at : data.created_at,
-            updated_at : data.updated_at
+            created_at : data.friendCreated_at,
+            updated_at : data.friendUpdated_at
         }
         return (
             this.props.user.auth.id == data.id_friends ? (
@@ -61,7 +61,7 @@ class PageScreen extends Component {
                         </Text>
                     </View>
                 </View>
-                <BackButton/>
+                <BackButton backTo='Friend'/>
             </View>
             ) : (
                 <View style={style.container}>
@@ -98,7 +98,7 @@ class PageScreen extends Component {
                         </Text>
                     </View>
                 </View>
-                <BackButton backTo={'Friend'}/>
+                <BackButton backTo='Friend'/>
             </View>
             )
         )

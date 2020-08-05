@@ -18,10 +18,12 @@ const style = StyleSheet.create({
     },
     card : {
         padding : 16,
-        position : 'absolute',
+        marginTop : 20,
+        marginRight : 20,
         left : 16,
+        marginBottom : 10,
         right : 16,
-        bottom : 10,
+        bottom : 0,
         height : 100,
         backgroundColor : 'white',
         display : 'flex',
@@ -37,7 +39,11 @@ const style = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
 
-        elevation: 5,
+        elevation: 2,
+    },
+    list : {
+        position : 'absolute',
+        bottom : 10,
     },
     profileHead : {
         display :'flex',

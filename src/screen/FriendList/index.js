@@ -1,24 +1,22 @@
 import React, { Component } from 'react'
-import { Text, View,StyleSheet,ScrollView, Image,TouchableOpacity,Modal,ActivityIndicator,Alert } from 'react-native'
+import { Text, View, RefreshControl,ScrollView, Image,TouchableOpacity,Modal,ActivityIndicator,Alert } from 'react-native'
 import styles from './style'
 import {Input,Button} from 'galio-framework'
 import IonIcon from 'react-native-vector-icons/Ionicons'
-// import { ScrollView } from 'react-native-gesture-handler';
-import image from '../../images/felin.jpg'
-import meta from '../../images/meta.jpg'
 import { connect } from 'react-redux'
 import { getFriend } from '../../redux/actions/home'
 import {API_URL} from '@env'
 import Axios from 'axios'
 import ListFriend from '../../components/ListFriend'
-
+import BtnOverlay from '../../components/BtnOverlay'
 class FriendList extends Component {
     constructor(props){
         super(props)
         this.state ={
             modalVisible : false,
             text : '',
-            isLoading : false
+            isLoading : false,
+            refresh : false
         }
     }
     componentDidMount(){
@@ -26,11 +24,17 @@ class FriendList extends Component {
     }
     
     handleGetFriend = ()=>{
+        this.setState({
+            refresh : true
+        })
         var data = {
             token : this.props.user.auth.token
         }
         this.props.getFriend(data).then((res)=>{
             console.log(res)
+            this.setState({
+                refresh : false
+            })
         }).catch((err)=>{
             console.log(err)
         })
@@ -50,10 +54,10 @@ class FriendList extends Component {
             }
         }).then((res)=>{
             this.handleGetFriend()
-            console.log(res)
+            console.log(res.data.msg)
             Alert.alert(
                 'Success',
-                this.state.text+' now is your friend',
+                this.state.text+ ' ' + res.data.msg,
                 [
                     { text: 'OK', onPress: () => console.log('OK Pressed') }
                 ],
@@ -66,7 +70,7 @@ class FriendList extends Component {
         }).catch((err)=>{
             Alert.alert(
                 'Ooops!!',
-                'email id '+this.state.text+' is incorrect',
+                'email '+this.state.text+' is incorrect',
                 [
                     { text: 'OK', onPress: () => console.log('OK Pressed') }
                 ],
@@ -85,44 +89,46 @@ class FriendList extends Component {
 
         return (
             <>
-            <View style={styles.content}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Friends</Text>
-                    <TouchableOpacity
-                    onPress={()=>{
-                        this.props.navigation.navigate('notif')
-                    }}>
-                        <IonIcon name="notifications" size={20} style={styles.searchIcon}/>
-                        {
-                            notif >=1?(
-                                <View style={styles.badge}>
-                                </View>
-                            ) : (
-                                <View>
-                                </View>
-                            )
-                        }
-                    </TouchableOpacity>
-                </View>
-                <ScrollView style={styles.mainContent}>
-                    {
-                        this.props.home.friend.filter((row,index)=>{
-                            return row.acc_at !== null
-                        }).map((row,index)=>{
-                            return <ListFriend key={index} data={row}/>
-                        })
-                    }
-                </ScrollView>
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={this.state.modalVisible}
-                        onRequestClose={() => {
-                            this.setState({
-                                modalVisible : false
-                            })
-                            }}
-                        >
+                <View style={styles.content}>
+                    <View style={styles.header}>
+                        <Text style={styles.title}>Friends</Text>
+                        <TouchableOpacity
+                        onPress={()=>{
+                            this.props.navigation.navigate('notif')
+                        }}>
+                            <IonIcon name="notifications" size={20} style={styles.searchIcon}/>
+                            {
+                                notif >=1?(
+                                    <View style={styles.badge}>
+                                    </View>
+                                ) : (
+                                    <View>
+                                    </View>
+                                )
+                            }
+                        </TouchableOpacity>
+                    </View>
+                        <ScrollView style={styles.mainContent}
+                        refreshControl={
+                            <RefreshControl refreshing={this.state.refresh} onRefresh={this.handleGetFriend} />
+                          }>
+                            {
+                                this.props.home.friend.filter((row,index)=>{
+                                    return row.acc_at !== null
+                                }).map((row,index)=>{
+                                    return <ListFriend key={index} data={row}/>
+                                })
+                            }
+                        </ScrollView>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={this.state.modalVisible}
+                            onRequestClose={() => {
+                                this.setState({
+                                    modalVisible : false
+                                })
+                            }} >
                             <View style={styles.modalContent}>
                                 <View style={styles.modal}>
                                 <Input placeholder="Enter Email id" rounded borderless={true} placeholderTextColor={'#D4D7DE'} color={'black'} onChangeText={text=>this.setState({text : text})}/>
@@ -135,18 +141,14 @@ class FriendList extends Component {
                                     </Button>
                                 </View>
                             </View>
-                    </Modal>
-            </View>
-                                <TouchableOpacity 
-                                onPress={()=>{
-                                    this.setState({
-                                        modalVisible : true
-                                    })
-                                }}
-                                style={styles.btnAdd}>
-                                    <IonIcon name="add-outline" size={25} style={{color: 'white'}}/>
-                                </TouchableOpacity>
-                                </>
+                        </Modal>
+                </View>
+                    <BtnOverlay icon="add-outline" style={{bottom : 10,right : 10}} onPress={()=>{
+                        this.setState({
+                            modalVisible : true
+                            })}}/>
+                    <BtnOverlay icon="map-outline" style={{bottom : 80,right : 10}} onPress={()=>{this.props.navigation.navigate('maplist',{user : this.props.user.auth})}}/>
+            </>
         )
     }
 }

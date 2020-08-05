@@ -34,7 +34,7 @@ export const accFriend = (data)=>{
         type : "ACC",
         payload : 
         axios({
-            method : 'POST',
+            method : 'PUT',
             url : `${API_URL}api/friend/${data.id}`,
             headers : {
                 Authorization : data.token
@@ -43,3 +43,16 @@ export const accFriend = (data)=>{
     }
 }
 
+export const decline = (data)=>{
+    return {
+        type : "DECLINE",
+        payload : 
+        axios({
+            method : 'DELETE',
+            url : `${API_URL}api/friend/${data.id}`,
+            headers : {
+                Authorization : data.token
+            }
+        })
+    }
+}

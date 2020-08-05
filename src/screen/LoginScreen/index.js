@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { Image,TextInput, Alert,TouchableOpacity,ToastAndroid,View,ActivityIndicator } from 'react-native';
-import { theme, withGalio,Text,Input,GalioProvider, Button,Toast} from 'galio-framework'
+import { Image, Alert, TouchableOpacity, View, ActivityIndicator, ScrollView } from 'react-native';
+import { Text,Input,GalioProvider, Button } from 'galio-framework'
 // import { View,Icon } from 'native-base';
 import LoginStyle from './style'
 import image from '../../images/chatLogin.png'
 import {login} from '../../redux/actions/auth'
-import Awsome from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux';
 class LoginScreen extends Component {
     constructor(props){
@@ -87,7 +86,7 @@ class LoginScreen extends Component {
         return (
             <>
             <GalioProvider theme={customTheme}>
-            <View style={LoginStyle.content}>
+            <ScrollView style={LoginStyle.content}>
                 <View style={LoginStyle.header}>
                     <View style={LoginStyle.bgImage} >
                     <Image source={image} style={LoginStyle.imgBg}></Image>
@@ -125,7 +124,7 @@ class LoginScreen extends Component {
                         <Text muted>Don't Have account?  </Text><Text onPress={this.onRegister}>Register</Text>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
             </GalioProvider>
             </>
         )

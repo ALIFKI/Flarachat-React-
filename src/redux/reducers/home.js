@@ -46,6 +46,10 @@ const home = (state = initialState,action) =>{
         return {
             ...state,
         }
+        case "DECLINE" : 
+        return {
+            ...state,
+        }
         default:
             return state
     }

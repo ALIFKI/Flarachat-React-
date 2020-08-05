@@ -8,7 +8,7 @@ import meta from '../../images/meta.jpg'
 import io from 'socket.io-client'
 import { connect } from 'react-redux'
 import { getHome } from '../../redux/actions/home'
-import {API_URL} from '@env'
+import { API_URL } from '@env'
 import moment from 'moment'
 
 class HomeScreen extends Component {
@@ -19,8 +19,14 @@ class HomeScreen extends Component {
     componentDidMount(){
         this.socket = io(`${API_URL}`)
         this.socket.on('chat',(msg)=>{
-            this.handleGetChatList()
+            // this.handleGetChatList()
+            if( this.props.user.auth.id == msg.id_users ||
+                this.props.user.auth.id == msg.id_sendTo  
+                ){
+                    this.handleGetChatList()
+            }
         })
+        this.socket.emit('read','hello Apps')
         this.handleGetChatList()
     }
     handleGetChatList = ()=>{
@@ -37,7 +43,7 @@ class HomeScreen extends Component {
         return (
             <View style={styles.content}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Messages</Text>
+        <Text style={styles.title}>Messages</Text>
                     <IonIcon name="search-outline" size={25} style={styles.searchIcon}/>
                 </View>
                 <ScrollView style={styles.mainContent}>
@@ -69,9 +75,16 @@ class HomeScreen extends Component {
                                         </View>
                                         <View style={styles.time}>
                                         <Text style={styles.hours}>{moment(row.created_at).fromNow(true)}</Text>
-                                            <View style={styles.unread}>
-                                                <Text style={{color : 'white',fontSize : 10,fontFamily :'Poppins-Bold'}}>1</Text>
-                                            </View>
+                                        {
+                                            row.id_sendTo !== this.props.user.auth.id ? (<></>) : (
+                                                row.read_at == null ? (
+                                                    <View style={styles.unread}>
+                                                        <Text style={{color : 'white',fontSize : 10,fontFamily :'Poppins-Bold'}}>
+                                                        </Text>
+                                                    </View>
+                                                ):(<></>)
+                                            )
+                                        }
                                         </View>
                                     </TouchableOpacity>
                         })
