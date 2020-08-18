@@ -9,7 +9,9 @@
 * [Features](https://github.com/ALIFKI/Flarachat-React-#features)
 * [Built wtih](https://github.com/ALIFKI/Flarachat-React-#features)
 * [Author](https://github.com/ALIFKI/Flarachat-React-#author)
+* [Screenshot](https://github.com/ALIFKI/Flarachat-React-#Screenshot)
 * [License](https://github.com/ALIFKI/Flarachat-React-#license)
+
 
 ## Prerequisites
 - Node.js installed on the local machine
@@ -37,6 +39,11 @@
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Password Hashing
 - [Socket.IO](https://socket.io/) - Realtime engine
 
+## Screenshot
+[url=https://ibb.co/bXt3BsP][img]https://i.ibb.co/NKR3j9s/Chat-App-Login.png[/img][/url]
+[url=https://ibb.co/CBKQbMS][img]https://i.ibb.co/Q9vMPCx/chat-personal.png[/img][/url]
+[url=https://ibb.co/c11ffdM][img]https://i.ibb.co/rmm88JT/Friend-chat.png[/img][/url]
+[url=https://ibb.co/cQXSmqt][img]https://i.ibb.co/yqBc325/Maps.png[/img][/url]
 
 ## Author
 - [Alifki](https://github.com/ALIFKI)
