@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View,Image,ScrollView,TouchableOpacity,Alert } from 'react-native'
+import { Text, View,Image,ScrollView,TouchableOpacity,Alert,ActivityIndicator } from 'react-native'
 import style from './style'
 import ImagePicker from 'react-native-image-picker';
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -14,11 +14,13 @@ class EditeScreen extends Component {
         super(props)
         this.state= {
             LogoutLoading : false,
+            isLoading : false,
             name : 'Flarista',
             bio : '',
             srcImg : {},
             uri : null,
             fileName : '',
+            type : null
 
         }
     }
@@ -29,13 +31,16 @@ class EditeScreen extends Component {
         })
     }
     handleSubmit = ()=>{
+        this.setState({
+            isLoading : true
+        })
         var formData = new FormData();
         formData.append('bio',this.state.bio)
         formData.append('name',this.state.name)
         if(this.state.uri){
             formData.append('image',{
                 uri: this.state.srcImg.uri,
-                type: 'image/jpeg',
+                type: this.state.type,
                 name: this.state.fileName,
             })
         }
@@ -53,6 +58,9 @@ class EditeScreen extends Component {
                 ],
                 { cancelable: false }
             )
+            this.setState({
+                isLoading : false
+            })
         }).catch((err)=>{
             console.log(err.response)
         })
@@ -77,12 +85,24 @@ class EditeScreen extends Component {
               console.log('User tapped custom button: ', response.customButton);
             }
             else {
-              console.log(response);
-              this.setState({
-                srcImg: { uri: response.uri },
-                uri: response.uri,
-                fileName: response.fileName
-              });
+                if(response.fileSize >= 2097152){
+                    Alert.alert(
+                        'Oopss!!',
+                        'Image Is To large no more then 2 mb',
+                        [
+                            { text: 'OK', onPress: () => console.log('OK Pressed') }
+                        ],
+                        { cancelable: false }
+                    )
+                }
+                else{
+                    this.setState({
+                      srcImg: { uri: response.uri },
+                      uri: response.uri,
+                      fileName: response.fileName,
+                      type : response.type
+                    })
+                }
             }
         });
     }
@@ -114,7 +134,13 @@ class EditeScreen extends Component {
                         <TouchableOpacity 
                         onPress={this.handleSubmit} 
                         style={style.icon}>
-                            <IonIcon name="bookmark-outline" size={25} style={{color: 'white'}}/>
+                            {
+                                this.state.isLoading ? (
+                                    <ActivityIndicator color={'white'}/>
+                                ) : (
+                                <IonIcon name="bookmark-outline" size={25} style={{color: 'white'}}/>
+                                )
+                            }
                         </TouchableOpacity>
                     </View>
                 </View>

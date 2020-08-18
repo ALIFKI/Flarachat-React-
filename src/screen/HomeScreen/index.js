@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { getHome } from '../../redux/actions/home'
 import { API_URL } from '@env'
 import moment from 'moment'
+import Axios from 'axios'
 
 class HomeScreen extends Component {
     constructor(props){
@@ -19,15 +20,26 @@ class HomeScreen extends Component {
     componentDidMount(){
         this.socket = io(`${API_URL}`)
         this.socket.on('chat',(msg)=>{
-            // this.handleGetChatList()
             if( this.props.user.auth.id == msg.id_users ||
                 this.props.user.auth.id == msg.id_sendTo  
-                ){
+                )
+            {
                     this.handleGetChatList()
             }
         })
         this.socket.emit('read','hello Apps')
         this.handleGetChatList()
+        Axios({
+            method  :'GET',
+            headers : {
+                Authorization : this.props.user.auth.token
+            },
+            url : `${API_URL}api/chat`
+        }).then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)
+        })
     }
     handleGetChatList = ()=>{
         var data = {
@@ -36,14 +48,14 @@ class HomeScreen extends Component {
         this.props.getHome(data).then((res)=>{
             console.log(res)
         }).catch((err)=>{
-            console.log(err)
+            console.log(err.response)
         })
     }
     render() {
         return (
             <View style={styles.content}>
                 <View style={styles.header}>
-        <Text style={styles.title}>Messages</Text>
+                    <Text style={styles.title}>Messages</Text>
                     <IonIcon name="search-outline" size={25} style={styles.searchIcon}/>
                 </View>
                 <ScrollView style={styles.mainContent}>

@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
     mainContent : {
         display : 'flex',
         flexDirection : 'column',
-        paddingTop : 10
+        paddingTop : 10,
+        minHeight : 100,
     },
     chatBody : {
         marginTop : 25,

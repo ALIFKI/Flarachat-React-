@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
-import { Image,TextInput,TouchableHighlight, Alert,View,ActivityIndicator } from 'react-native';
+import { Image,TextInput,TouchableHighlight, Alert,View,ActivityIndicator, ScrollView } from 'react-native';
 import { theme, withGalio,Text,Input,GalioProvider, Button} from 'galio-framework'
 // import {Icon } from 'native-base';
 import LoginStyle from './style';
 import IonIcon from 'react-native-vector-icons/FontAwesome'
 import { register } from '../../redux/actions/auth'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import Axios from 'axios';
+import {API_URL} from '@env'
+
 class RegisterScreen extends Component {
     constructor(props){
         super(props)
@@ -17,6 +20,18 @@ class RegisterScreen extends Component {
             password : '',
             validate : false
         }
+        Axios({
+            method : 'POST',
+            url : `${API_URL}api/users/login`,
+            data : {
+                email : "alifki81@gmail.com",
+                password : "12345678"
+            }
+        }).then((res)=>{
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err.response)
+        })
     }
     handelRegister = ()=>{
         if(this.state.validate === true){
@@ -41,6 +56,7 @@ class RegisterScreen extends Component {
                     isLoading : false
                 })
             }).catch((err)=>{
+                console.log(err)
                 var msg = err.response.data.msg
                 msg == `Duplicate entry '${this.state.email}' for key 'users_email_unique'` ? msg="Email Already Used!" : msg=msg
                 Alert.alert(
@@ -94,7 +110,7 @@ class RegisterScreen extends Component {
         return (
             <>
             <GalioProvider theme={customTheme}>
-            <View style={LoginStyle.content}>
+            <ScrollView style={LoginStyle.content}>
                 <View style={LoginStyle.header}>
                 </View>
                 <View style={LoginStyle.header}>
@@ -135,6 +151,8 @@ class RegisterScreen extends Component {
                         <Text>Login</Text> */}
                     </View>
                 </View>
+            </ScrollView>
+            </GalioProvider>
                 <TouchableHighlight
                  activeOpacity={0.6}
                  underlayColor="#DDDDDD"
@@ -145,8 +163,6 @@ class RegisterScreen extends Component {
                       <IonIcon name="arrow-left" size={15} color={'white'}/><Text style={{color: 'white',marginLeft : 5}}>Back</Text>
                 </View>
                 </TouchableHighlight>
-            </View>
-            </GalioProvider>
             </>
         )
     }

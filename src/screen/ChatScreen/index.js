@@ -33,6 +33,10 @@ class ChatScreen extends Component {
         }
     }
     handleSubmit = ()=>{
+        if (this.state.txt == '' ) {
+            
+        }
+        else{
         axios({
             method : 'POST',
             headers : {
@@ -48,6 +52,7 @@ class ChatScreen extends Component {
                 txt : ''
             })
         })
+    }
     }
     componentDidMount(){
         this.socket = io(`${API_URL}`)

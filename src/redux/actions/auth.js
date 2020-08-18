@@ -11,7 +11,7 @@ export const login = data => {
                 email : data.username,
                 password : data.password
             }
-        }),
+        })
     }
 }
 

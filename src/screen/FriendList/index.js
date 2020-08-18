@@ -86,7 +86,10 @@ class FriendList extends Component {
         const notif = this.props.home.friend.filter((row,index)=>{
             return row.acc_at == null
         }).length
-
+        const count = this.props.home.friend.filter((row,index)=>{
+            return row.acc_at !== null
+        }).length
+        const friend = count <= 0 ? false : true
         return (
             <>
                 <View style={styles.content}>
@@ -102,8 +105,7 @@ class FriendList extends Component {
                                     <View style={styles.badge}>
                                     </View>
                                 ) : (
-                                    <View>
-                                    </View>
+                                    <></>
                                 )
                             }
                         </TouchableOpacity>
@@ -147,7 +149,11 @@ class FriendList extends Component {
                         this.setState({
                             modalVisible : true
                             })}}/>
-                    <BtnOverlay icon="map-outline" style={{bottom : 80,right : 10}} onPress={()=>{this.props.navigation.navigate('maplist',{user : this.props.user.auth})}}/>
+                            {
+                                friend ? (
+                                    <BtnOverlay icon="map-outline" style={{bottom : 80,right : 10}} onPress={()=>{this.props.navigation.navigate('maplist',{user : this.props.user.auth})}}/>
+                                ) : (<></>)
+                            }
             </>
         )
     }

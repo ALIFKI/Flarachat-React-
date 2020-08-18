@@ -6,6 +6,8 @@ import LoginStyle from './style'
 import image from '../../images/chatLogin.png'
 import {login} from '../../redux/actions/auth'
 import { connect } from 'react-redux';
+import { API_URL } from '@env'
+
 class LoginScreen extends Component {
     constructor(props){
         super(props)
@@ -48,11 +50,13 @@ class LoginScreen extends Component {
                 isLoading : true
             })
             this.props.login(data).then((res)=>{
+                console.log(res)
                 this.setState({
                     isLoading : false
                 })
                 this.props.navigation.navigate('dashboard')
             }).catch((err)=>{
+                console.log(err)
                 this.setState({
                     isLoading : false
                 })
@@ -91,7 +95,7 @@ class LoginScreen extends Component {
                     <View style={LoginStyle.bgImage} >
                     <Image source={image} style={LoginStyle.imgBg}></Image>
                     </View>
-                    <Text h6 style={LoginStyle.wl}>Welcome Back !!</Text>
+        <Text h6 style={LoginStyle.wl}>Welcome Back !!</Text>
                     <Text muted>
                         Lets Chat with your friend and connected
                     </Text>

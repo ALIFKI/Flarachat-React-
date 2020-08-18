@@ -17,6 +17,7 @@ export const getBook = (token) =>{
 export const deleteBook = (data)=>{
     return {
         type : "DELETE_BOOK",
+        meta : data.index,
         payload :         
         axios({
             method : 'DELETE',
@@ -24,8 +25,7 @@ export const deleteBook = (data)=>{
             headers : {
                 Authorization : data.token
             }
-        }),
-        meta : data.index
+        })
     }
 }
 

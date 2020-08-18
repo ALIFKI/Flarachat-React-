@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {API_URL} from '@env'
 
-export const getHome = (data)=>{
+export const getHome = data =>{
     return {
         type : "MSG_GET",
         payload : 
@@ -15,7 +15,7 @@ export const getHome = (data)=>{
     }
 }
 
-export const getFriend = (data)=>{
+export const getFriend = data=>{
     return {
         type : "GET_FRIEND",
         payload : 
@@ -29,7 +29,7 @@ export const getFriend = (data)=>{
     }
 }
 
-export const accFriend = (data)=>{
+export const accFriend = data=>{
     return {
         type : "ACC",
         payload : 
@@ -43,7 +43,7 @@ export const accFriend = (data)=>{
     }
 }
 
-export const decline = (data)=>{
+export const decline = data=>{
     return {
         type : "DECLINE",
         payload : 

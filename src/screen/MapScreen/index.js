@@ -46,11 +46,14 @@ class MapScreen extends Component {
                     lat : loc.coords.latitude,
                     long : loc.coords.longitude
             },()=>{
-                this.map.animateToRegion({
-                    latitude: this.state.lat,
-                    longitude: this.state.long,
-                    latitudeDelta: 0.0002,
-                    longitudeDelta: 0.0091}, 2000)
+                if(this.props.route.params.user.id == this.props.user.auth.id){
+                    this.map.animateToRegion({
+                        latitude: this.state.lat,
+                        longitude: this.state.long,
+                        latitudeDelta: 0.0002,
+                        longitudeDelta: 0.0091}, 2000)
+
+                }
             })
             // this.map.animateToRegion({
             //     latitude: coords.latitude,
