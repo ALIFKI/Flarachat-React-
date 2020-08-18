@@ -1,15 +1,14 @@
 # Flarachat
 
 
-`Flarachat App` mobile app built with React Native and Redux which has [features](https://github.com/ALIFKI/Flarachat-React-#features) such as login / register using JWT, pasword hashing, CORS, etc.
-
+`Flarachat App` mobile app built with React Native, Socket.IO and Redux which has [features](https://github.com/ALIFKI/Flarachat-React-#features) to make it easier for people to connect
 ## :memo: Table Of Content
 * [Prerequisites](https://github.com/ALIFKI/Flarachat-React-#prerequisites)
 * [Installation](https://github.com/ALIFKI/Flarachat-React-#installation)
 * [Features](https://github.com/ALIFKI/Flarachat-React-#features)
 * [Built wtih](https://github.com/ALIFKI/Flarachat-React-#features)
-* [Author](https://github.com/ALIFKI/Flarachat-React-#author)
 * [Screenshot](https://github.com/ALIFKI/Flarachat-React-#Screenshot)
+* [Author](https://github.com/ALIFKI/Flarachat-React-#author)
 * [License](https://github.com/ALIFKI/Flarachat-React-#license)
 
 
