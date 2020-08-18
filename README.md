@@ -40,10 +40,11 @@
 - [Socket.IO](https://socket.io/) - Realtime engine
 
 ## Screenshot
-[url=https://ibb.co/bXt3BsP][img]https://i.ibb.co/NKR3j9s/Chat-App-Login.png[/img][/url]
-[url=https://ibb.co/CBKQbMS][img]https://i.ibb.co/Q9vMPCx/chat-personal.png[/img][/url]
-[url=https://ibb.co/c11ffdM][img]https://i.ibb.co/rmm88JT/Friend-chat.png[/img][/url]
-[url=https://ibb.co/cQXSmqt][img]https://i.ibb.co/yqBc325/Maps.png[/img][/url]
+
+[![Chat-App-Login.png](https://i.postimg.cc/HxB7VzQn/Chat-App-Login.png)](https://postimg.cc/0MKN4pX1)
+[![chat-personal.png](https://i.postimg.cc/sxxGSWcc/chat-personal.png)](https://postimg.cc/vxRmwcCg)
+[![Friend-chat.png](https://i.postimg.cc/Fz6dxKCQ/Friend-chat.png)](https://postimg.cc/xNK1f9Ss)
+[![Maps.png](https://i.postimg.cc/v82VyPYS/Maps.png)](https://postimg.cc/Hj5x497Q)
 
 ## Author
 - [Alifki](https://github.com/ALIFKI)
