@@ -17,7 +17,7 @@
     "@react-navigation/drawer": "^5.8.6",
     "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.7.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-plugin-dotenv-import": "^2.1.0",
     "galio-framework": "^0.7.1",
     "moment": "^2.27.0",
